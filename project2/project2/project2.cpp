@@ -55,6 +55,7 @@ bool is_the_sequence_correct(int n) {
 	}
 }*/
 
+//the basic version of the function. I can't do it without using a variable
 void coup(int &x) {
 	int a = 0;
 	while (x > 0) {
@@ -62,6 +63,21 @@ void coup(int &x) {
 		x = x / 10;
 	}
 	x = a;
+}
+
+void task4(int &n) {
+	n = n + 65;
+	for (int j = n - 1; j >= 65; j--) {
+		for (int i = 65; i <= n - 1; i++) {
+			if (i <= j) std::cout << char(i);
+			else std::cout << " ";
+		}
+		for (int i = n - 2; i >= 65; i--) {
+			if (i <= j) std::cout << char(i);
+			else std::cout << " ";
+		}
+		std::cout << "\n";
+	}
 }
 
 int main(){
@@ -74,4 +90,6 @@ int main(){
 
 	/*coup(n);
 	std::cout << n;*/
+
+	//task4(n);
 }
