@@ -33,8 +33,8 @@ void checking_the_set_for_prime_and_palindrome(int n) {
 	}
 }
 
-/*bool is_the_sequence_correct(int n) {
-	char a, char b, bool R = 1;
+bool is_the_sequence_correct(int n) {
+	char a; char b; bool R = 1;
 	std::cin >> a;
 	for (int i = 1; i <= n - 1; i++) {
 		std::cin >> b;
@@ -45,7 +45,7 @@ void checking_the_set_for_prime_and_palindrome(int n) {
 		a = b;
 	}
 	return R;
-}*/
+}
 
 /*int upper_bound(int &x) {
 	int i = 1;
