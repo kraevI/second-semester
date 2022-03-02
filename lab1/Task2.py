@@ -12,8 +12,8 @@ Y = [];
 
 with open('task2_stat.txt') as file:
     for line in file:
-        X.append(int(line.split()[8].lower()))
-        Y.append(int(line.split()[14].lower()))
+        X.append(int(line.split()[7].lower()))
+        Y.append(int(line.split()[13].lower()))
 
 Y_average = [0];
 for i in range(1, 101):
