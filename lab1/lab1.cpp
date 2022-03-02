@@ -1,10 +1,11 @@
 ﻿#include <iostream>
 #include <stdlib.h>
 #include <time.h>
+#include <fstream>
 
-// 1. Создание массива размера vertical_size x horizontal_size x 2, заполнение нулями. функция вывода таблицы.
-const int vertical_size = 10;
-const int horizontal_size = 14;
+// 1. Создание массива размера vertical_size x horizontal_size x 2, заполнение нулями. Функция вывода таблицы.
+const int vertical_size = 12;
+const int horizontal_size = 15;
 int crystal[vertical_size][horizontal_size][3] = { 0 };
 
 void crystal_output() {
@@ -17,9 +18,9 @@ void crystal_output() {
 }
 
 // 2. Заполнение нужного процента от всех ячеек элементами вида [1, 1, 0], что значит [дислокация, активна, ещё не сдвигалась на этом шаге].
-const unsigned int percentage_of_dislocation = 20;
-void initial_filling_of_the_crystal(const unsigned int &percentage) {
-    unsigned int real_percentage = 0;
+const unsigned int percentage_of_dislocation = 5;
+unsigned int real_percentage = 0;
+void initial_filling_of_the_crystal(const unsigned int &percentage, unsigned int &real_percentage) {
     for (int i = 0; i < vertical_size; ++i)
         for (int j = 0; j < horizontal_size; ++j) {
             unsigned int indicator = 1 + rand() % (100 - 1 + 1);
@@ -33,7 +34,7 @@ void initial_filling_of_the_crystal(const unsigned int &percentage) {
     std::cout << "Real percentage: " << real_percentage * 100 / (vertical_size * horizontal_size) << "\n";
 }
 
-// 3. Функциz, со счётчиком активных дислокаций, проверяющяя соседние клетки.
+// 3. Функция, со счётчиком активных дислокаций, проверяющяя соседние клетки.
 int checking_neighbors() {
     unsigned int counter = 0;
     for (int i = 0; i < vertical_size; ++i)
@@ -85,7 +86,7 @@ int main() {
     std::cout << "Empty crystal:" << "\n";
     crystal_output();
     std::cout << "Initial filling. ";
-    initial_filling_of_the_crystal(percentage_of_dislocation);
+    initial_filling_of_the_crystal(percentage_of_dislocation, real_percentage);
     std::cout << "Crystal:" << "\n";
     crystal_output();
 
@@ -102,9 +103,16 @@ int main() {
         step_number += 1;
     }
 
-    std::cout << "All dislocations are stationary. Total number of steps:" << step_number << "\n";
+    std::cout << "All dislocations are stationary. Total number of steps: " << step_number << "\n";
     crystal_output();
+
+
+    //Вывод в файл информации о запуске.
+    std::ofstream stat_out("task2_stat.txt", std::ios_base::app);
+    stat_out << "Crystal size: " << vertical_size << " * " << horizontal_size << " ; ";
+    stat_out << "real percentage: " << real_percentage * 100 / (vertical_size * horizontal_size) << " ; ";
+    stat_out << "total number of steps: " << step_number << "\n";
+    stat_out.close();
 
     return 0;
 }
-
