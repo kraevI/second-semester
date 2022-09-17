@@ -28,8 +28,12 @@ for i in range(1, 101):
     else: Y_average[i] = int(Y_average[i]/n)
 
 plt.figure()
+#plt.subplot(1, 2, 1)
 plt.plot(Y_average)
 plt.xlabel(r'$Percentage Of Dislocation$', fontsize=12)
 plt.ylabel(r'$Average Number Of Steps$', fontsize=12)
+plt.title("Task2")
 plt.grid(True)
+
+
 plt.show()

@@ -4,7 +4,7 @@
 #include <fstream>
 
 // Задание параметров кристалла. Создание массива размера vertical_size x horizontal_size x 3, заполнение нулями. Функция вывода таблицы.
-const unsigned int vertical_size = 1;
+const unsigned int vertical_size = 12;
 const unsigned int horizontal_size = 15;
 int crystal[vertical_size][horizontal_size][3] = { 0 };
 
@@ -18,7 +18,7 @@ void crystal_output() {
 }
 
 // Функция заполнения нужного процента от всех ячеек элементами вида [1, 1, 0], что значит [дислокация, активна, ещё не сдвигалась на этом шаге].
-const unsigned int percentage_of_dislocation = 86;
+const unsigned int percentage_of_dislocation = 20;
 void initial_filling_of_the_crystal(const unsigned int &percentage) {
     unsigned int counter = 0;
     while (counter < percentage * (vertical_size * horizontal_size) / 100) {
@@ -32,7 +32,7 @@ void initial_filling_of_the_crystal(const unsigned int &percentage) {
         }
     }
 
-    //std::cout << "Real percentage: " << percentage << "\n";
+    std::cout << "Real percentage: " << percentage << "\n";
 }
 
 void initial_filling_of_the_crystal() {
@@ -81,7 +81,7 @@ void move() {
     for (int i = 0; i < vertical_size; ++i)
         for (int j = 0; j < horizontal_size; ++j)
             if (crystal[i][j][1] == 1 && crystal[i][j][2] == 0) {
-                unsigned int direction = 1 + rand() % (4 - 1 + 1);
+                unsigned int direction = 1 + rand() % (5 - 1 + 1);
                 if (direction == 1) {
                     std::swap(crystal[i][j], crystal[i - 1][j]);
                     crystal[i - 1][j][2] = { 1 };
@@ -94,10 +94,11 @@ void move() {
                     std::swap(crystal[i][j], crystal[i + 1][j]);
                     crystal[i + 1][j][2] = { 1 };
                 }
-                else {
+                else if (direction == 4) {
                     std::swap(crystal[i][j], crystal[i][j - 1]);
                     crystal[i][j - 1][2] = { 1 };
                 }
+                else crystal[i][j][2] = { 1 };
             }
     for (int i = 0; i < vertical_size; ++i)
         for (int j = 0; j < horizontal_size; ++j) crystal[i][j][2] = 0;
@@ -107,15 +108,16 @@ void move_for_limiting_case() {
     for (int i = 0; i < vertical_size; ++i)
         for (int j = 0; j < horizontal_size; ++j)
             if (crystal[i][j][1] == 1 && crystal[i][j][2] == 0) {
-                unsigned int direction = 1 + rand() % (2 - 1 + 1);
+                unsigned int direction = 1 + rand() % (3 - 1 + 1);
                 if (direction == 1) {
                     std::swap(crystal[i][j], crystal[i][j + 1]);
                     crystal[i][j + 1][2] = { 1 };
                 }
-                else {
+                else if (direction == 2) {
                     std::swap(crystal[i][j], crystal[i][j - 1]);
                     crystal[i][j - 1][2] = { 1 };
                 }
+                else crystal[i][j][2] = 1;
             }
     for (int i = 0; i < vertical_size; ++i)
         for (int j = 0; j < horizontal_size; ++j) crystal[i][j][2] = 0;
@@ -125,28 +127,28 @@ void move_for_limiting_case() {
 void one_full_run(const unsigned int &percentage_of_dislocation) {
 
     // Первоначальное заполнение кристалла.
-    //std::cout << "Empty crystal:" << "\n";
-    //crystal_output();
-    //std::cout << "Initial filling. ";
+    std::cout << "Empty crystal:" << "\n";
+    crystal_output();
+    std::cout << "Initial filling. ";
     initial_filling_of_the_crystal(percentage_of_dislocation);
-    //std::cout << "Crystal:" << "\n";
-    //crystal_output();
+    std::cout << "Crystal:" << "\n";
+    crystal_output();
 
-    unsigned int flag = checking_neighbors_for_limiting_case();
+    unsigned int flag = checking_neighbors();
     unsigned int step_number = 0;
     while (flag > 0) {
-        //std::cout << "Step number: " << step_number << "  Active dislocations: " << flag << "\n";
-        //std::cout << "Crystal after freezing:" << "\n";
-        //crystal_output();
-        move_for_limiting_case();
-        //std::cout << "Crystal after moving:" << "\n";
-        //crystal_output();
-        flag = checking_neighbors_for_limiting_case();
+        std::cout << "Step number: " << step_number << "  Active dislocations: " << flag << "\n";
+        std::cout << "Crystal after freezing:" << "\n";
+        crystal_output();
+        move();
+        std::cout << "Crystal after moving:" << "\n";
+        crystal_output();
+        flag = checking_neighbors();
         step_number += 1;
     }
 
-    //std::cout << "All dislocations are stationary. Total number of steps: " << step_number << "\n";
-    //crystal_output();
+    std::cout << "All dislocations are stationary. Total number of steps: " << step_number << "\n";
+    crystal_output();
 
     //Вывод в файл информации о запуске.
     std::ofstream stat_out("task3_B_stat.txt", std::ios_base::app);
@@ -161,7 +163,7 @@ int main() {
 
     srand(time(NULL));
 
-    for (int i = 1; i <= 1000; i++) {
+    for (int i = 1; i <= 1; i++) {
         one_full_run(percentage_of_dislocation);
         for (int i = 0; i < vertical_size; ++i)
             for (int j = 0; j < horizontal_size; ++j) {

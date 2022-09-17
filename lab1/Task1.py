@@ -24,7 +24,7 @@ for i in range(4, 48, 4):
     index += 1
 
 plt.figure()
-plt.plot(range(4, 48, 4), Y_average, 'ro')
+plt.plot(range(4, 48, 4), Y_average, 'go')
 plt.xlabel(r'$Side Of Square$', fontsize=12)
 plt.ylabel(r'$Average Number Of Steps$', fontsize=12)
 plt.grid(True)
